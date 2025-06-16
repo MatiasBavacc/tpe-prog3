@@ -60,25 +60,26 @@ Breve explicación de la estrategia de resolución de Backtraking.
 - La estrategia de backtraking que utilizamos es, ir seleccionando las maquinas si la cantidad que fabrican
 no supera la cantidad que se desea fabricar, teniendo en cuenta las que ya se fabricaron.
 - El arbol de exploracion se genera de la siguiente forma para el ejemplo [7,3,4,1].
-[]
-[7] - [7,3] - [7,3,1] - [7,3,1,1]
-    - [7,4] - [7,4,1]
-    - [7,1]
-[3] - [3,7]
-    - [3,3]
-    - ...
-[4] - [4,7]
-    - ...
-[1] - [1,7]
-    - ...
-    - [1,1]
+
+-[]
+-[7] - [7,3] - [7,3,1] - [7,3,1,1]
+-    - [7,4] - [7,4,1]
+-    - [7,1]
+-[3] - [3,7]
+-    - [3,3]
+-    - ...
+-[4] - [4,7]
+-    - ...
+-[1] - [1,7]
+-    - ...
+-    - [1,1]
 - Fin de abrol de exploracion.
 
 - Estados finales.
-{ [7,3,1,1],[7,4,1],[7,1],[3,7],[3,3],[3,4],[3,1],etc...}
+- { [7,3,1,1],[7,4,1],[7,1],[3,7],[3,3],[3,4],[3,1],etc...}
 
 - Estados solucion.
-{[7,3,1,1],[7,4,1]}
+- {[7,3,1,1],[7,4,1]}
 
 - Posibles podas.
 - Si la cantidad de piezas que faltan fabricar menos la cantidad de piezas de la maquina que vamos a prender es 

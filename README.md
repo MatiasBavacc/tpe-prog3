@@ -62,16 +62,16 @@ no supera la cantidad que se desea fabricar, teniendo en cuenta las que ya se fa
 - El arbol de exploracion se genera de la siguiente forma para el ejemplo [7,3,4,1].
 []
 [7] - [7,3] - [7,3,1] - [7,3,1,1]
-	- [7,4] - [7,4,1]
-	- [7,1]
+    - [7,4] - [7,4,1]
+    - [7,1]
 [3] - [3,7]
-	- [3,3]
-	- ...
+    - [3,3]
+    - ...
 [4] - [4,7]
-	- ...
+    - ...
 [1] - [1,7]
-	- ...
-	- [1,1]
+    - ...
+    - [1,1]
 - Fin de abrol de exploracion.
 
 - Estados finales.

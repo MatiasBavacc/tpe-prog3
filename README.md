@@ -54,68 +54,74 @@ Solución óptima posible: `[M1, M3, M4]` o `[M3, M3, M3]`
 
 ## 🧠 Estrategias Implementadas
 
-### 🔄 Backtracking
-/*
-	* Breve explicación de la estrategia de resolución de Backtraking.
-	* - La estrategia de backtraking que utilizamos es, ir seleccionando las maquinas si la cantidad que fabrican
-	* no supera la cantidad que se desea fabricar, teniendo en cuenta las que ya se fabricaron.
-	* - El arbol de exploracion se genera de la siguiente forma para el ejemplo [7,3,4,1].
-	* []
-	* [7] - [7,3] - [7,3,1] - [7,3,1,1]
-	* 	  - [7,4] - [7,4,1]
-	* 	  - [7,1]
-	* [3] - [3,7]
-	* 	  - [3,3]
-	* 	  - ...
-	* [4] - [4,7]
-	*  	  - ...
-	* [1] - [1,7]
-	* 	  - ...
-	* 	  - [1,1]
-	* - Fin de abrol de exploracion.
-	* 
-	* - Estados finales.
-	* { [7,3,1,1],[7,4,1],[7,1],[3,7],[3,3],[3,4],[3,1],etc...}
-	* 
-	* - Estados solucion.
-	* {[7,3,1,1],[7,4,1]}
-	* 
-	* - Posibles podas.
-	* - Si la cantidad de piezas que faltan fabricar menos la cantidad de piezas de la maquina que vamos a prender es 
-	* mayor o igual a cero, entonces le permito prenderla.
-	* - Si la cantidad de maquinas prendidas que tiene la solucion parcial, mas la maquina que prendera en su proximo 
-	* llamado, es menor a la cantidad de maquinas prendidas que tiene la solucion, entonces permito hacer el llamdo.
-	* 
-	*/
+### 🧭 Backtracking
+
+Breve explicación de la estrategia de resolución de Backtraking.
+- La estrategia de backtraking que utilizamos es, ir seleccionando las maquinas si la cantidad que fabrican
+no supera la cantidad que se desea fabricar, teniendo en cuenta las que ya se fabricaron.
+- El arbol de exploracion se genera de la siguiente forma para el ejemplo [7,3,4,1].
+[]
+[7] - [7,3] - [7,3,1] - [7,3,1,1]
+	- [7,4] - [7,4,1]
+	- [7,1]
+[3] - [3,7]
+	- [3,3]
+	- ...
+[4] - [4,7]
+	- ...
+[1] - [1,7]
+	- ...
+	- [1,1]
+- Fin de abrol de exploracion.
+
+- Estados finales.
+{ [7,3,1,1],[7,4,1],[7,1],[3,7],[3,3],[3,4],[3,1],etc...}
+
+- Estados solucion.
+{[7,3,1,1],[7,4,1]}
+
+- Posibles podas.
+- Si la cantidad de piezas que faltan fabricar menos la cantidad de piezas de la maquina que vamos a prender es 
+mayor o igual a cero, entonces le permito prenderla.
+- Si la cantidad de maquinas prendidas que tiene la solucion parcial, mas la maquina que prendera en su proximo 
+llamado, es menor a la cantidad de maquinas prendidas que tiene la solucion, entonces permito hacer el llamdo.
+	
+
 public void backtracking(...) { ... }
 
-### 🔄 Greedy
-/*
-	* Breve explicación de la estrategia de resolución de Greedy.
-	* -La estrategia greedy que utilizamos es buscar los candidatos que mas piezas fabriquen y agregarlos a la
-	* solucion, siempre que no superen la cantidad que se desea fabricar teniendo en cuenta las que ya se fabricaron.
-	* - Los candidatos son [7,4,3,1].
-	* - Estrategia de selección de candidatos es buscar el candidato que mas piezas fabrique.
-	* La busqueda se hace recorriendo una hashtable, lo que no nos permite ordenarla.
-	* - Si una maquina fabrica mas piezas de las que necesito, no la tomo en cuenta de nuevo en la solucion,
-	* borro la maquina de mis candidatos y de lo contrario la agrego.
-	* - Puede darse para algunos casos que no exista solucion.
-	* Por ejemplo para el caso [60,25,10,30] dondde se busquen fabricar 95 piezas, debido a que el algoritmo 
-	* busca el mayor, el arreglo podria plantearse de la siguiente manera [60,30,25,10].
-	* Agregaria los dos primeros, y cualquier cosa que agregara despues se pasaria, por lo cual, nuestro algoritmo no
-	* tiene forma de dar una solucion.
-	* - Caso contrario es el del ejemplo, donde tenemos [7,3,4,1] y se necesitan fabricar 12 piezas.
-	* En este caso el arreglo puede representarse [7,4,3,1], agregaria los dos primeros numeros a la solucion y luego
-	* de eliminar al numero 3, agregaria al numero uno a la solucion, instanciando a la solucion el siguiente arreglo
-	* [7,4,1].
-	* - El arbol de exploracion para este ejemplo es:
-	* [7]
-	* [7] - 7 *Elimina el 7 de candidatos.
-	* [7] - 4
-	* [7,4] - 4 *Elimina al 4 de candidatos.
-	* [7,4] - 3 *Elimina al 3 de candidatos.
-	* [7,4] - 1 *[7,4,1] Termina.
-	*/
+### ⚡ Greedy
+
+Breve explicación de la estrategia de resolución de Greedy.
+-La estrategia greedy que utilizamos es buscar los candidatos que mas piezas fabriquen y agregarlos a la
+solucion, siempre que no superen la cantidad que se desea fabricar teniendo en cuenta las que ya se fabricaron.
+
+- Los candidatos son [7,4,3,1].
+
+- Estrategia de selección de candidatos es buscar el candidato que mas piezas fabrique.
+La busqueda se hace recorriendo una hashtable, lo que no nos permite ordenarla.
+
+- Si una maquina fabrica mas piezas de las que necesito, no la tomo en cuenta de nuevo en la solucion,
+borro la maquina de mis candidatos y de lo contrario la agrego.
+
+- Puede darse para algunos casos que no exista solucion.
+Por ejemplo para el caso [60,25,10,30] dondde se busquen fabricar 95 piezas, debido a que el algoritmo 
+busca el mayor, el arreglo podria plantearse de la siguiente manera [60,30,25,10].
+Agregaria los dos primeros, y cualquier cosa que agregara despues se pasaria, por lo cual, nuestro algoritmo no
+tiene forma de dar una solucion.
+
+- Caso contrario es el del ejemplo, donde tenemos [7,3,4,1] y se necesitan fabricar 12 piezas.
+En este caso el arreglo puede representarse [7,4,3,1], agregaria los dos primeros numeros a la solucion y luego
+de eliminar al numero 3, agregaria al numero uno a la solucion, instanciando a la solucion el siguiente arreglo
+[7,4,1].
+
+- El arbol de exploracion para este ejemplo es:
+[7]
+[7] - 7 *Elimina el 7 de candidatos.
+[7] - 4
+[7,4] - 4 *Elimina al 4 de candidatos.
+[7,4] - 3 *Elimina al 3 de candidatos.
+[7,4] - 1 *[7,4,1] Termina.
+
 public void greedy(...) { ... }
 
 🧑‍💻 Autores

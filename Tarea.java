@@ -2,6 +2,7 @@ package tpe;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -94,7 +95,8 @@ public class Tarea {
 	/*
 	* Breve explicación de la estrategia de resolución de Backtraking.
 	* - La estrategia de backtraking que utilizamos es, ir seleccionando las maquinas si la cantidad que fabrican
-	* no supera la cantidad que se desea fabricar, teniendo en cuenta las que ya se fabricaron.
+	* no supera la cantidad que se desea fabricar, teniendo en cuenta las que ya se fabricaron, llevamos como parametro
+	* un indice que le dice al algoritmo por que maquina continuar, para no repetir estados.
 	* - El arbol de exploracion se genera de la siguiente forma para el ejemplo [7,3,4,1].
 	* []
 	* [7] - [7,3] - [7,3,1] - [7,3,1,1]
@@ -121,6 +123,8 @@ public class Tarea {
 	* mayor o igual a cero, entonces le permito prenderla.
 	* - Si la cantidad de maquinas prendidas que tiene la solucion parcial, mas la maquina que prendera en su proximo 
 	* llamado, es menor a la cantidad de maquinas prendidas que tiene la solucion, entonces permito hacer el llamdo.
+	* - Si ya recorri todo los estados posibles con la primera maquina, dejo de tener en cuenta esa maquina para los
+	* siguientes llamados.
 	* 
 	*/
 	 
@@ -129,7 +133,7 @@ public class Tarea {
         this.estadosGenerados = 0;
 		List<Maquina> solucionParcial = new ArrayList<>();
 		Integer faltanFabricar = this.total;
-		backtracking( solucionParcial , faltanFabricar );
+		backtracking( solucionParcial , faltanFabricar,  1 );
 		System.out.print("Resultado FINAL: ");
 		System.out.println(this.salida);
 		System.out.print("Cantidad de piezas producidas: ");
@@ -140,19 +144,19 @@ public class Tarea {
 		System.out.println(this.estadosGenerados);
 	}
 	
-	private void backtracking( List<Maquina> solucionParcial , Integer faltanFabricar ) {
+	private void backtracking( List<Maquina> solucionParcial , Integer faltanFabricar, int index ) {
         this.estadosGenerados ++;
 		if ( faltanFabricar == 0) {
 			if ((this.salida.size() == 0 ) || ( this.salida.size() > solucionParcial.size() )) {
 				this.salida = new ArrayList<>(solucionParcial);
 			}
 		} else {
-			for ( int i = 1 ; i <= this.entrada.cantidad() ; i++ ) {
+			for ( int i = index ; i <= this.entrada.cantidad() ; i++ ) {
 				Maquina maquina = this.entrada.acceder(i);
 				if ( (faltanFabricar - maquina.getPiezas() ) >= 0 ) {
 					if ((this.salida.size() == 0 ) || ( this.salida.size() > (solucionParcial.size()+1) )) {
 						solucionParcial.add(maquina);
-						backtracking( solucionParcial , ( faltanFabricar - maquina.getPiezas() ) );
+						backtracking( solucionParcial , ( faltanFabricar - maquina.getPiezas() ), i );
 						solucionParcial.remove(maquina);	
 					}	
 				}  
@@ -162,13 +166,13 @@ public class Tarea {
 	
 	/*
 	* Breve explicación de la estrategia de resolución de Greedy.
-	* -La estrategia greedy que utilizamos es buscar los candidatos que mas piezas fabriquen y agregarlos a la
-	* solucion, siempre que no superen la cantidad que se desea fabricar teniendo en cuenta las que ya se fabricaron.
+	* -La estrategia greedy que utilizamos a los candidatos que mas piezas fabriquen ordenarlos primero en la lista 
+	* y agregarlos a la solucion, siempre que no superen la cantidad que se desea fabricar teniendo en cuenta 
+	* las que ya se fabricaron.
 	* - Los candidatos son [7,4,3,1].
-	* - Estrategia de selección de candidatos es buscar el candidato que mas piezas fabrique.
-	* La busqueda se hace recorriendo una hashtable, lo que no nos permite ordenarla.
+	* - Estrategia de selección de candidatos ordenar primero los candidatos que mas piezas fabriquen.
 	* - Si una maquina fabrica mas piezas de las que necesito, no la tomo en cuenta de nuevo en la solucion,
-	* borro la maquina de mis candidatos y de lo contrario la agrego.
+	* borro la maquina de mis candidatos y de lo contrario la agrego a la solucion.
 	* - Puede darse para algunos casos que no exista solucion.
 	* Por ejemplo para el caso [60,25,10,30] dondde se busquen fabricar 95 piezas, debido a que el algoritmo 
 	* busca el mayor, el arreglo podria plantearse de la siguiente manera [60,30,25,10].
@@ -190,9 +194,11 @@ public class Tarea {
 	public void greedy() {
 		this.salida.clear();
         this.estadosGenerados = 0;
-        TablaHash candidatos = new TablaHash(this.entrada);
-		List<Maquina> solucionParcial = new ArrayList<>();
-		Integer faltanFabricar = this.total;
+        List<Maquina> candidatos = new ArrayList<Maquina>();
+        List<Maquina> solucionParcial = new ArrayList<>();
+        Integer faltanFabricar = this.total;
+        candidatos = this.entrada.copiarEnLista();
+        candidatos.sort(Comparator.comparingInt( m -> ( (Maquina) m).getPiezas() ).reversed() );
 		this.greedy(candidatos, solucionParcial , faltanFabricar );
 		if(this.salida.size() > 0) {
 			System.out.print("Resultado FINAL: ");
@@ -208,15 +214,15 @@ public class Tarea {
 		}
 	}
 	
-	private void greedy(TablaHash candidatos,List<Maquina> solucionParcial,Integer faltanFabricar) {
+	private void greedy(List<Maquina> candidatos,List<Maquina> solucionParcial,Integer faltanFabricar) {
 		while( (!candidatos.isEmpty()) && !(faltanFabricar==0) ) {
 			this.estadosGenerados ++;
-			Integer maquina = candidatos.buscarMayor();
-			if(faltanFabricar-candidatos.acceder(maquina).getPiezas() >= 0) {
-				solucionParcial.add(candidatos.acceder(maquina));
-				faltanFabricar -= candidatos.acceder(maquina).getPiezas();
+			Maquina maquina = candidatos.get(0);
+			if(faltanFabricar-maquina.getPiezas() >= 0) {
+				solucionParcial.add(maquina);
+				faltanFabricar -= maquina.getPiezas();
 			}else {
-				candidatos.borrar(maquina);
+				candidatos.remove(0);
 			}
 		}
 		if(faltanFabricar==0) {

@@ -1,6 +1,8 @@
 package tpe;
 
 import java.util.Hashtable;
+import java.util.List;
+import java.util.ArrayList;
 
 public class TablaHash {
 		
@@ -58,6 +60,14 @@ public class TablaHash {
 	    		}
 	    	}
 	    	return possMayor;
+	    }
+	    
+	    public List<Maquina> copiarEnLista(){
+	    	List<Maquina> nueva = new ArrayList<Maquina> ();
+	    	for(Integer index : this.tablaH.keySet()) {
+	    		nueva.add(this.tablaH.get(index));
+	    	}
+	    	return nueva;
 	    }
 
 	    @Override

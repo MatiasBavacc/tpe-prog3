@@ -58,7 +58,8 @@ Solución óptima posible: `[M1, M3, M4]` o `[M3, M3, M3]`
 
 Breve explicación de la estrategia de resolución de Backtraking.
 - La estrategia de backtraking que utilizamos es, ir seleccionando las maquinas si la cantidad que fabrican
-no supera la cantidad que se desea fabricar, teniendo en cuenta las que ya se fabricaron.
+no supera la cantidad que se desea fabricar, teniendo en cuenta las que ya se fabricaron, llevamos como parametro
+un indice que le dice al algoritmo por que maquina continuar, para no repetir estados.
 - El arbol de exploracion se genera de la siguiente forma para el ejemplo [7,3,4,1].
 
 -[]
@@ -98,6 +99,8 @@ no supera la cantidad que se desea fabricar, teniendo en cuenta las que ya se fa
 mayor o igual a cero, entonces le permito prenderla.
 - Si la cantidad de maquinas prendidas que tiene la solucion parcial, mas la maquina que prendera en su proximo 
 llamado, es menor a la cantidad de maquinas prendidas que tiene la solucion, entonces permito hacer el llamdo.
+- Si ya recorri todo los estados posibles con la primera maquina, dejo de tener en cuenta esa maquina para los
+siguientes llamados.
 	
 
 public void backtracking(...) { ... }
@@ -105,12 +108,12 @@ public void backtracking(...) { ... }
 ### ⚡ Greedy
 
 Breve explicación de la estrategia de resolución de Greedy.
--La estrategia greedy que utilizamos es buscar los candidatos que mas piezas fabriquen y agregarlos a la
-solucion, siempre que no superen la cantidad que se desea fabricar teniendo en cuenta las que ya se fabricaron.
+--La estrategia greedy que utilizamos a los candidatos que mas piezas fabriquen ordenarlos primero en la lista 
+y agregarlos a la solucion, siempre que no superen la cantidad que se desea fabricar teniendo en cuenta las que ya se fabricaron.
 
 - Los candidatos son [7,4,3,1].
 
-- Estrategia de selección de candidatos es buscar el candidato que mas piezas fabrique.
+- Estrategia de selección de candidatos es ordenar primero los candidatos que mas piezas fabriquen.
 La busqueda se hace recorriendo una hashtable, lo que no nos permite ordenarla.
 
 - Si una maquina fabrica mas piezas de las que necesito, no la tomo en cuenta de nuevo en la solucion,
